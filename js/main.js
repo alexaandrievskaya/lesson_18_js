@@ -47,28 +47,21 @@ console.log(wordsList(myLongStr, 'rep')); // {"repellendus", "repudiandae", "rep
 
 let myDate = new Date();
 
-let getLocalDate = function (date, isSeconds = false, isISO = false) {
+let getLocalDate = function (date, isSeconds , isISO ) {
     const reg = new RegExp(':\\d{2}$', 'gui');
-    let res;
-
-    if (!isISO)  res = isSeconds ? date.toLocaleString() : date.toLocaleString().replace(reg, '');
+    let result;
+    if (isISO) result = isSeconds ? date.toLocaleString() : date.toLocaleString().replace(reg, '');
     else {
         const year = date.getFullYear();
-        const month =
-            date.getMonth() + 1 < 9 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-        const day = date.getDate() < 9 ? `0${date.getDate()}` : date.getDate();
-        const hour = date.getHours() < 9 ? `0${date.getHours()}` : date.getHours();
-        const minutes =
-            date.getMinutes() < 9 ? `0${date.getMinutes()}` : date.getMinutes();
-        const seconds =
-            date.getSeconds() < 9 ? `0${date.getSeconds()}` : date.getSeconds();
+        const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        const day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        const hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+        const minutes = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        const seconds = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
 
-        res = isSeconds
-            ? `${year}-${month}-${day}, ${hour}:${minutes}:${seconds}`
-            : `${year}-${month}-${day}, ${hour}:${minutes}`;
-    }
-
-    return res;
+        result   = isSeconds ? `${year}-${month}-${day}, ${hour}:${minutes}:${seconds}` : `${year}-${month}-${day}, ${hour}:${minutes}`;
+     }
+    return result;
 };
 
 console.log(getLocalDate(myDate)); // 16.07.2019, 00:15
@@ -81,14 +74,14 @@ console.log(getLocalDate(new Date(123456), false, true)); // 1970-01-01, 03:02:0
 console.log(getLocalDate(new Date(123456), true, true)); // 1970-01-01, 03:02:03
 
 // тестирование
-console.log(getLocalDate(new Date(123456)) === '01.01.1970, 03:02');
-console.log(getLocalDate(new Date(123456), true) === '01.01.1970, 03:02:03');
-console.log(getLocalDate(new Date(123456), false, true) === '1970-01-01, 03:02');
-console.log(getLocalDate(new Date(123456), true, true) === '1970-01-01, 03:02:03');
-console.log(getLocalDate(new Date(1999999123456)) === '18.05.2033, 06:18');
-console.log(getLocalDate(new Date(1999999123456), true) === '18.05.2033, 06:18:43');
-console.log(getLocalDate(new Date(1999999123456), false, true) === '2033-05-18, 06:18');
-console.log(getLocalDate(new Date(1999999123456), true, true) === '2033-05-18, 06:18:43');
+//console.log(getLocalDate(new Date(123456)) === '01.01.1970, 03:02');
+//console.log(getLocalDate(new Date(123456), true) === '01.01.1970, 03:02:03');
+//console.log(getLocalDate(new Date(123456), false, true) === '1970-01-01, 03:02');
+//console.log(getLocalDate(new Date(123456), true, true) === '1970-01-01, 03:02:03');
+//console.log(getLocalDate(new Date(1999999123456)) === '18.05.2033, 06:18');
+//console.log(getLocalDate(new Date(1999999123456), true) === '18.05.2033, 06:18:43');
+//console.log(getLocalDate(new Date(1999999123456), false, true) === '2033-05-18, 06:18');
+//console.log(getLocalDate(new Date(1999999123456), true, true) === '2033-05-18, 06:18:43');
 
 /*
  * #3
@@ -98,7 +91,7 @@ console.log(getLocalDate(new Date(1999999123456), true, true) === '2033-05-18, 0
  */
 function getWeekDay (d) {
     let date = new Date(d);
-    let days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+    let days = ['воскресение', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
     return days[date.getDay()];
 }
 
@@ -116,7 +109,7 @@ console.log(getWeekDay('2019-07-27')); // суббота
 let getLocalDay = function (d) {
     let date = new Date(d);
     let day = date.getDay();
-    if (day == 0) {
+    if (day === 0) {
         day = 7;
     }
     return day;
@@ -138,8 +131,8 @@ let getDateAgo = (d, days) => {
     const date = new Date(d);
 
     date.setDate(date.getDate() - days);
-
-    return date.toLocaleString().replace(/(\d.*),\s+(\d.*)/gu, '$1');
+    let options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+    return date.toLocaleString('uk-UA', options);
 };
 
 console.log(getDateAgo('2019-01-29', 1)); // 28.01.2019
@@ -233,3 +226,5 @@ function test2() {
 console.log(testPerformance(100, test1)); // time
 console.log(testPerformance(100, test2)); // time
 console.log(testPerformance(100, 12345)); // 0
+
+
